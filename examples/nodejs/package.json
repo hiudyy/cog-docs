@@ -1,0 +1,22 @@
+{
+  "name": "cognima-api-examples",
+  "version": "1.0.0",
+  "description": "Examples for using Cognima API with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "chat": "node chat_completion.js",
+    "image": "node image_generation.js",
+    "custom": "node custom_model.js",
+    "pinterest": "node pinterest.js",
+    "tiktok": "node tiktok.js",
+    "instagram": "node instagram.js",
+    "youtube": "node youtube.js",
+    "lyrics": "node lyrics.js",
+    "status": "node api_status.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "author": "Cognima",
+  "license": "MIT"
+}
