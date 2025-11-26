@@ -27,6 +27,19 @@ Welcome to the Cognima API documentation! This guide provides detailed informati
   - [YouTube](#youtube)
   - [Lyrics](#lyrics)
   - [Movies](#movies)
+- [File Download Services](#file-download-services)
+  - [Google Drive](#google-drive)
+  - [MediaFire](#mediafire)
+  - [Twitter/X](#twitterx)
+- [Web Search](#web-search)
+  - [General Search](#general-search)
+  - [News Search](#news-search)
+- [App Store Search](#app-store-search)
+  - [Search Both Stores](#search-both-stores)
+  - [Google Play Store](#google-play-store)
+  - [Apple App Store](#apple-app-store)
+  - [App Details](#app-details)
+  - [Similar Apps](#similar-apps)
 - [API Status](#api-status)
 - [OpenAI Compatible Endpoints](#openai-compatible-endpoints)
 - [Error Handling](#error-handling)
@@ -1183,6 +1196,519 @@ curl -X GET "https://cog2.cognima.com.br/api/v1/filmes/123" \
 
 ---
 
+## File Download Services
+
+### Google Drive
+
+Download files from Google Drive.
+
+#### Get Google Drive File Info
+
+Get file information without downloading.
+
+**Endpoint:** `GET /api/v1/gdrive/info`
+
+**Query Parameters:**
+- `url` (string, required): Google Drive file URL
+
+**Supported URL Formats:**
+- `https://drive.google.com/file/d/FILE_ID/view`
+- `https://drive.google.com/open?id=FILE_ID`
+- `https://drive.google.com/uc?id=FILE_ID`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "fileId": "1ABC123xyz",
+    "fileName": "document.pdf",
+    "fileSize": "15.32 MB",
+    "fileSizeBytes": 16066560,
+    "downloadUrl": "https://drive.google.com/uc?...",
+    "mimetype": "application/pdf"
+  }
+}
+```
+
+#### Download Google Drive File
+
+Get download link or redirect to file.
+
+**Endpoint:** `GET /api/v1/gdrive/download`
+
+**Query Parameters:**
+- `url` (string, required): Google Drive file URL
+- `redirect` (boolean, optional): If `true`, redirects to download URL
+
+**Example Request:**
+
+```bash
+# Get download info as JSON
+curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Redirect directly to download
+curl -L "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view&redirect=true" \
+  -H "X-API-Key: ck_your_api_key" \
+  --output file.pdf
+```
+
+---
+
+### MediaFire
+
+Download files from MediaFire.
+
+#### Get MediaFire File Info
+
+Get file information without downloading.
+
+**Endpoint:** `GET /api/v1/mediafire/info`
+
+**Query Parameters:**
+- `url` (string, required): MediaFire file URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "fileName": "arquivo.zip",
+    "fileSize": "256.45 MB",
+    "uploadDate": "2024-01-15",
+    "mimetype": "application/zip",
+    "extension": "zip",
+    "downloadUrl": "https://download123.mediafire.com/..."
+  }
+}
+```
+
+#### Download MediaFire File
+
+Get download link or redirect to file.
+
+**Endpoint:** `GET /api/v1/mediafire/download`
+
+**Query Parameters:**
+- `url` (string, required): MediaFire file URL
+- `redirect` (boolean, optional): If `true`, redirects to download URL
+
+**Example Request:**
+
+```bash
+# Get download info as JSON
+curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Redirect directly to download
+curl -L "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file&redirect=true" \
+  -H "X-API-Key: ck_your_api_key" \
+  --output arquivo.zip
+```
+
+---
+
+### Twitter/X
+
+Download media from Twitter/X posts.
+
+#### Get Tweet Info
+
+Get complete tweet information including author, stats, and media.
+
+**Endpoint:** `GET /api/v1/twitter/info`
+
+**Query Parameters:**
+- `url` (string, required): Twitter/X tweet URL
+
+**Supported URL Formats:**
+- `https://twitter.com/user/status/ID`
+- `https://x.com/user/status/ID`
+- `https://twitter.com/i/status/ID`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "1234567890",
+    "text": "This is a tweet with video! 🎬",
+    "createdAt": "Wed Nov 06 12:00:00 +0000 2024",
+    "createdTimestamp": 1730894400,
+    "url": "https://twitter.com/user/status/1234567890",
+    "stats": {
+      "replies": 50,
+      "retweets": 200,
+      "likes": 1500
+    },
+    "possiblySensitive": false,
+    "author": {
+      "id": "9876543210",
+      "name": "User Name",
+      "username": "user",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/...",
+      "bannerUrl": "https://pbs.twimg.com/profile_banners/..."
+    },
+    "type": "video",
+    "media": [
+      {
+        "type": "video",
+        "duration": 30000,
+        "thumbnailUrl": "https://pbs.twimg.com/...",
+        "url": "https://video.twimg.com/...",
+        "bestQuality": {
+          "bitrate": 2176000,
+          "contentType": "video/mp4",
+          "resolution": "1280x720",
+          "url": "https://video.twimg.com/..."
+        },
+        "variants": [
+          {
+            "bitrate": 2176000,
+            "contentType": "video/mp4",
+            "resolution": "1280x720",
+            "url": "https://..."
+          },
+          {
+            "bitrate": 832000,
+            "contentType": "video/mp4",
+            "resolution": "640x360",
+            "url": "https://..."
+          }
+        ]
+      }
+    ],
+    "hasMedia": true
+  }
+}
+```
+
+#### Download Twitter Media
+
+Get direct download links for best quality media.
+
+**Endpoint:** `GET /api/v1/twitter/download`
+
+**Query Parameters:**
+- `url` (string, required): Twitter/X tweet URL
+- `redirect` (boolean, optional): If `true`, redirects to first media download URL
+
+**Example Request:**
+
+```bash
+# Get download links as JSON
+curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Redirect directly to first media
+curl -L "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890&redirect=true" \
+  -H "X-API-Key: ck_your_api_key" \
+  --output video.mp4
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "tweetId": "1234567890",
+    "author": "user",
+    "type": "video",
+    "downloads": [
+      {
+        "type": "video",
+        "url": "https://video.twimg.com/...",
+        "resolution": "1280x720",
+        "thumbnail": "https://pbs.twimg.com/...",
+        "duration": 30000
+      }
+    ]
+  }
+}
+```
+
+**Supported Media Types:**
+- **Videos**: Multiple resolutions available (best quality selected automatically)
+- **Photos**: Original quality images
+- **GIFs**: Animated GIFs
+
+---
+
+## Web Search
+
+Search the web using DuckDuckGo (privacy-focused search).
+
+### General Search
+
+Search for anything on the web.
+
+**Endpoint:** `GET /api/v1/search`
+
+**Query Parameters:**
+
+- `q` or `query` (string, required): Search query
+- `max` or `maxResults` (integer, optional): Maximum results (default: 10)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/search?q=artificial+intelligence&max=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "query": "artificial intelligence",
+    "totalResults": 5,
+    "results": [
+      {
+        "position": 1,
+        "title": "Artificial Intelligence - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+        "description": "Artificial intelligence (AI) is the intelligence of machines...",
+        "displayUrl": "en.wikipedia.org"
+      },
+      {
+        "position": 2,
+        "title": "What is AI? | IBM",
+        "url": "https://www.ibm.com/topics/artificial-intelligence",
+        "description": "Artificial intelligence leverages computers and machines...",
+        "displayUrl": "www.ibm.com"
+      }
+    ]
+  }
+}
+```
+
+### News Search
+
+Search for recent news articles.
+
+**Endpoint:** `GET /api/v1/search/news`
+
+**Query Parameters:**
+
+- `q` or `query` (string, required): Search query
+- `max` or `maxResults` (integer, optional): Maximum results (default: 10)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/search/news?q=technology+brazil&max=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "query": "technology brazil news",
+    "type": "news",
+    "totalResults": 5,
+    "results": [
+      {
+        "position": 1,
+        "title": "Brazil Tech Industry Growth in 2024",
+        "url": "https://example.com/article",
+        "description": "Brazil's technology sector continues to grow...",
+        "displayUrl": "example.com"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## App Store Search
+
+Search for apps on Google Play Store and Apple App Store.
+
+### Search Both Stores
+
+Search for apps on both stores in a single request.
+
+**Endpoint:** `GET /api/v1/apps/search`
+
+**Query Parameters:**
+
+- `q` or `query` (string, required): Search query
+- `num` (integer, optional): Number of results per store (default: 10, max: 50)
+- `country` (string, optional): Country code (default: 'br')
+- `lang` (string, optional): Language code (default: 'pt')
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/search?q=whatsapp&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "query": "whatsapp",
+    "playStore": [
+      {
+        "store": "playStore",
+        "appId": "com.whatsapp",
+        "title": "WhatsApp Messenger",
+        "developer": "WhatsApp LLC",
+        "icon": "https://play-lh.googleusercontent.com/...",
+        "url": "https://play.google.com/store/apps/details?id=com.whatsapp",
+        "score": 4.2,
+        "price": "Free",
+        "free": true,
+        "summary": "Simple. Reliable. Private.",
+        "installs": "5,000,000,000+"
+      }
+    ],
+    "appStore": [
+      {
+        "store": "appStore",
+        "id": 310633997,
+        "appId": "com.whatsapp.WhatsApp",
+        "title": "WhatsApp Messenger",
+        "developer": "WhatsApp Inc.",
+        "icon": "https://is1-ssl.mzstatic.com/...",
+        "url": "https://apps.apple.com/...",
+        "score": 4.7,
+        "price": 0,
+        "free": true
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+### Google Play Store
+
+Search only on Google Play Store.
+
+**Endpoint:** `GET /api/v1/apps/playstore`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/playstore?q=games&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+### Apple App Store
+
+Search only on Apple App Store.
+
+**Endpoint:** `GET /api/v1/apps/appstore`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/appstore?q=music&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+### App Details
+
+Get detailed information about a specific app.
+
+**Endpoint:** `GET /api/v1/apps/details`
+
+**Query Parameters:**
+- `id` or `appId` (string, required): App ID (e.g., 'com.whatsapp' for Play Store)
+- `store` (string, required): 'playStore', 'appStore', 'play', or 'ios'
+- `country` (string, optional): Country code (default: 'br')
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "store": "playStore",
+    "appId": "com.whatsapp",
+    "title": "WhatsApp Messenger",
+    "description": "WhatsApp from Meta is a FREE messaging and video calling app...",
+    "developer": "WhatsApp LLC",
+    "developerEmail": "support@whatsapp.com",
+    "icon": "https://play-lh.googleusercontent.com/...",
+    "screenshots": ["..."],
+    "score": 4.2,
+    "ratings": 178509328,
+    "reviews": 12956341,
+    "price": "Free",
+    "free": true,
+    "installs": "5,000,000,000+",
+    "genre": "Communication",
+    "version": "2.24.10.75",
+    "updated": 1715875200000,
+    "androidVersion": "5.0"
+  }
+}
+```
+
+### Similar Apps
+
+Get apps similar to a specific app.
+
+**Endpoint:** `GET /api/v1/apps/similar`
+
+**Query Parameters:**
+- `id` or `appId` (string, required): App ID
+- `store` (string, required): 'playStore', 'appStore', 'play', or 'ios'
+- `num` (integer, optional): Number of results (default: 10)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+---
+
 ## API Status
 
 ### Get API Status
@@ -1668,6 +2194,78 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/instagram/download" \
   -d '{"url": "https://www.instagram.com/p/ABC123xyz/"}'
 ```
 
+#### Google Drive Download
+
+```bash
+# Get file info
+curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Download file
+curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+#### MediaFire Download
+
+```bash
+# Get file info
+curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Download file
+curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+#### Twitter/X Download
+
+```bash
+# Get tweet info
+curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Download media
+curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+#### Web Search
+
+```bash
+# General web search
+curl -X GET "https://cog2.cognima.com.br/api/v1/search?q=artificial+intelligence&max=10" \
+  -H "X-API-Key: ck_your_api_key"
+
+# News search
+curl -X GET "https://cog2.cognima.com.br/api/v1/search/news?q=technology+news&max=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+#### App Store Search
+
+```bash
+# Search both stores (Play Store + App Store)
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/search?q=whatsapp&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Search Play Store only
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/playstore?q=games&num=10" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Search App Store only
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/appstore?q=music&num=10" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Get app details
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
+  -H "X-API-Key: ck_your_api_key"
+
+# Get similar apps
+curl -X GET "https://cog2.cognima.com.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
 ---
 
 ## Best Practices
@@ -1732,7 +2330,28 @@ For questions, issues, or feature requests:
 
 ## Changelog
 
-### Version 2.0.0 (Current)
+### Version 2.3.0 (Current)
+
+- ✨ App Store search API (Google Play + Apple App Store)
+- ✨ App details and similar apps endpoints
+- ✨ Multi-store search in single request
+
+### Version 2.2.0
+
+- ✨ Web search API (DuckDuckGo)
+- ✨ News search API
+- 🔧 Privacy-focused search results
+
+### Version 2.1.0
+
+- ✨ Google Drive file download support
+- ✨ MediaFire file download support
+- ✨ Twitter/X media download (videos, photos, GIFs)
+- ✨ Admin panel quick key creation presets
+- ✨ API key regeneration feature
+- 🔧 Improved admin panel UX
+
+### Version 2.0.0
 
 - ✨ Custom models support
 - ✨ Cognima branded models
