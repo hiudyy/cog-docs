@@ -12,7 +12,6 @@ Welcome to the Cognima API documentation! This guide provides detailed informati
   - [List Models](#list-models)
   - [Get Model Info](#get-model-info)
   - [Chat Completion](#chat-completion)
-  - [Image Generation](#image-generation)
 - [Custom Models](#custom-models)
   - [Create Custom Model](#create-custom-model)
   - [List Custom Models](#list-custom-models)
@@ -337,96 +336,6 @@ Each chunk:
 ```
 
 Final message: `data: [DONE]`
-
-### Image Generation
-
-Generate images using AI models.
-
-**Endpoint:** `POST /api/v1/generate`
-
-**Request Body:**
-
-```json
-{
-  "model": "deepimg",
-  "prompt": "A beautiful sunset over mountains",
-  "negative_prompt": "blurry, low quality",
-  "size": "1024x1024",
-  "quality": "standard",
-  "n": 1,
-  "response_format": "url"
-}
-```
-
-**Parameters:**
-
-- `model` (string, required): Image model ID
-- `prompt` (string, required): Image description (1-4000 chars)
-- `negative_prompt` (string, optional): What to avoid (max 4000 chars)
-- `size` (string, optional): Image dimensions (default: "1024x1024")
-  - Options: "256x256", "512x512", "1024x1024", "1024x1792", "1792x1024"
-- `quality` (string, optional): "standard" or "hd"
-- `style` (string, optional): Image style
-- `n` (integer, optional): Number of images (1-10, default: 1)
-- `response_format` (string, optional): "url" or "b64_json"
-- `guidance_scale` (number, optional): Guidance strength (1-20, default: 7.5)
-- `num_inference_steps` (integer, optional): Generation steps (1-150, default: 50)
-- `seed` (integer, optional): Random seed
-- `scheduler` (string, optional): Scheduler algorithm
-- `safety_checker` (boolean, optional): Enable safety filter (default: true)
-
-**Example Request:**
-
-```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/generate" \
-  -H "X-API-Key: ck_your_api_key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "deepimg",
-    "prompt": "A futuristic city with flying cars",
-    "size": "1024x1024",
-    "quality": "hd"
-  }'
-```
-
-**Example Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "created": 1699999999,
-    "data": [
-      {
-        "url": "https://example.com/image.png",
-        "revised_prompt": "A futuristic city...",
-        "size": "1024x1024",
-        "quality": "hd",
-        "index": 1
-      }
-    ]
-  },
-  "usage": {
-    "images_generated": 1,
-    "estimated_cost": 0.04
-  },
-  "request_id": "img_1699999999_xyz789",
-  "processing_time_ms": 3456
-}
-```
-
-### Get Image Models
-
-List all available image generation models.
-
-**Endpoint:** `GET /api/v1/generate/models`
-
-**Example Request:**
-
-```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/generate/models" \
-  -H "X-API-Key: ck_your_api_key"
-```
 
 ---
 
@@ -2010,34 +1919,6 @@ async function chatCompletion() {
 chatCompletion();
 ```
 
-#### Image Generation
-
-```javascript
-async function generateImage() {
-  try {
-    const response = await axios.post(
-      'https://cog2.cognima.com.br/api/v1/generate',
-      {
-        model: 'deepimg',
-        prompt: 'A serene mountain landscape at sunset',
-        size: '1024x1024'
-      },
-      {
-        headers: {
-          'X-API-Key': 'ck_your_api_key',
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    
-    console.log('Image URL:', response.data.data.data[0].url);
-  } catch (error) {
-    console.error('Error:', error.response?.data || error.message);
-  }
-}
-
-generateImage();
-```
 
 ### Python
 
