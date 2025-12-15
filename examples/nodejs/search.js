@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const API_KEY = process.env.COGNIMA_API_KEY || 'ck_your_api_key';
-const BASE_URL = 'https://cog2.cognima.com.br/api/v1';
+const BASE_URL = 'https://cog.api.br/api/v1';
 
 /**
  * Pesquisa web geral

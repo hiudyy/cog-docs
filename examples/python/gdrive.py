@@ -2,7 +2,7 @@ import requests
 import os
 
 API_KEY = os.environ.get('COGNIMA_API_KEY', 'ck_your_api_key')
-BASE_URL = 'https://cog2.cognima.com.br/api/v1'
+BASE_URL = 'https://cog.api.br/api/v1'
 
 def get_gdrive_info():
     """Obter informações de arquivo do Google Drive"""

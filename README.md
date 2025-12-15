@@ -2,7 +2,7 @@
 
 Welcome to the Cognima API documentation! This guide provides detailed information on how to use all available endpoints.
 
-**Base URL:** `https://cog2.cognima.com.br`
+**Base URL:** `https://cog.api.br`
 
 ## Table of Contents
 
@@ -39,6 +39,12 @@ Welcome to the Cognima API documentation! This guide provides detailed informati
   - [Apple App Store](#apple-app-store)
   - [App Details](#app-details)
   - [Similar Apps](#similar-apps)
+- [Free Fire Likes](#free-fire-likes)
+  - [Service Info](#free-fire-service-info)
+  - [Send Likes](#send-free-fire-likes)
+- [Data Queries](#data-queries)
+  - [Query Status](#query-status)
+  - [Perform Query](#perform-data-query)
 - [API Status](#api-status)
 - [OpenAI Compatible Endpoints](#openai-compatible-endpoints)
 - [Error Handling](#error-handling)
@@ -94,7 +100,7 @@ Get all available AI models.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/models?include_stats=true" \
+curl -X GET "https://cog.api.br/api/v1/models?include_stats=true" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -139,7 +145,7 @@ Filter models by company/provider.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/models/microsoft" \
+curl -X GET "https://cog.api.br/api/v1/models/microsoft" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -152,7 +158,7 @@ Filter models by type (chat, image, completion).
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/models/chat" \
+curl -X GET "https://cog.api.br/api/v1/models/chat" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -165,7 +171,7 @@ Get detailed information about a specific model.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/models/microsoft/phi-3-medium-128k-instruct/info" \
+curl -X GET "https://cog.api.br/api/v1/models/microsoft/phi-3-medium-128k-instruct/info" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -178,7 +184,7 @@ Get models that support advanced thinking mode.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/models/thinking" \
+curl -X GET "https://cog.api.br/api/v1/models/thinking" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -245,7 +251,7 @@ Generate text responses using AI models.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/completion" \
+curl -X POST "https://cog.api.br/api/v1/completion" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -308,7 +314,7 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/completion" \
 Enable streaming for real-time token generation:
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/completion" \
+curl -X POST "https://cog.api.br/api/v1/completion" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -370,7 +376,7 @@ Create personalized AI models with custom personalities and behaviors.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/custom" \
+curl -X POST "https://cog.api.br/api/v1/custom" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -413,7 +419,7 @@ Get all your custom models.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/custom?page=1&limit=10" \
+curl -X GET "https://cog.api.br/api/v1/custom?page=1&limit=10" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -455,7 +461,7 @@ Get details of a specific custom model.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/custom/123" \
+curl -X GET "https://cog.api.br/api/v1/custom/123" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -487,7 +493,7 @@ Update an existing custom model.
 **Example Request:**
 
 ```bash
-curl -X PUT "https://cog2.cognima.com.br/api/v1/custom/123" \
+curl -X PUT "https://cog.api.br/api/v1/custom/123" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -505,7 +511,7 @@ Delete a custom model.
 **Example Request:**
 
 ```bash
-curl -X DELETE "https://cog2.cognima.com.br/api/v1/custom/123" \
+curl -X DELETE "https://cog.api.br/api/v1/custom/123" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -514,7 +520,7 @@ curl -X DELETE "https://cog2.cognima.com.br/api/v1/custom/123" \
 Use your custom model in chat completions:
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/completion" \
+curl -X POST "https://cog.api.br/api/v1/completion" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -574,7 +580,7 @@ Search for images on Pinterest.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/pinterest/search" \
+curl -X POST "https://cog.api.br/api/v1/pinterest/search" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"query": "minimalist architecture"}'
@@ -621,7 +627,7 @@ Download media from a Pinterest pin.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/pinterest/download" \
+curl -X POST "https://cog.api.br/api/v1/pinterest/download" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://pinterest.com/pin/123456789/"}'
@@ -682,7 +688,7 @@ Download videos from TikTok.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/tiktok/download" \
+curl -X POST "https://cog.api.br/api/v1/tiktok/download" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.tiktok.com/@user/video/1234567890"}'
@@ -747,7 +753,7 @@ Search for videos on TikTok.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/tiktok/search" \
+curl -X POST "https://cog.api.br/api/v1/tiktok/search" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"query": "funny cats"}'
@@ -782,7 +788,7 @@ Download media from Instagram posts, reels, or stories.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/instagram/download" \
+curl -X POST "https://cog.api.br/api/v1/instagram/download" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.instagram.com/p/ABC123xyz/"}'
@@ -851,7 +857,7 @@ Search for videos on YouTube.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/youtube/search" \
+curl -X POST "https://cog.api.br/api/v1/youtube/search" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"query": "javascript tutorial"}'
@@ -912,7 +918,7 @@ Download audio from YouTube videos.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/youtube/mp3" \
+curl -X POST "https://cog.api.br/api/v1/youtube/mp3" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}'
@@ -939,7 +945,7 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/youtube/mp3" \
 Set `Accept: audio/mpeg` header or `direct: true` to receive the file directly:
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/youtube/mp3" \
+curl -X POST "https://cog.api.br/api/v1/youtube/mp3" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Accept: audio/mpeg" \
   -H "Content-Type: application/json" \
@@ -972,7 +978,7 @@ Download videos from YouTube.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/youtube/mp4" \
+curl -X POST "https://cog.api.br/api/v1/youtube/mp4" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "quality": "720p"}'
@@ -1024,7 +1030,7 @@ Search for song lyrics.
 **Example Request:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/lyrics/search" \
+curl -X POST "https://cog.api.br/api/v1/lyrics/search" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"query": "bohemian rhapsody queen"}'
@@ -1070,7 +1076,7 @@ Get available movies from cache.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/filmes" \
+curl -X GET "https://cog.api.br/api/v1/filmes" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1086,7 +1092,7 @@ Search for a specific movie.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/filmes/buscar?nome=inception" \
+curl -X GET "https://cog.api.br/api/v1/filmes/buscar?nome=inception" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1099,7 +1105,7 @@ Get detailed information about a movie.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/filmes/123" \
+curl -X GET "https://cog.api.br/api/v1/filmes/123" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1128,7 +1134,7 @@ Get file information without downloading.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+curl -X GET "https://cog.api.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1162,11 +1168,11 @@ Get download link or redirect to file.
 
 ```bash
 # Get download info as JSON
-curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+curl -X GET "https://cog.api.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
   -H "X-API-Key: ck_your_api_key"
 
 # Redirect directly to download
-curl -L "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view&redirect=true" \
+curl -L "https://cog.api.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view&redirect=true" \
   -H "X-API-Key: ck_your_api_key" \
   --output file.pdf
 ```
@@ -1189,7 +1195,7 @@ Get file information without downloading.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+curl -X GET "https://cog.api.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1223,11 +1229,11 @@ Get download link or redirect to file.
 
 ```bash
 # Get download info as JSON
-curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+curl -X GET "https://cog.api.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
   -H "X-API-Key: ck_your_api_key"
 
 # Redirect directly to download
-curl -L "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file&redirect=true" \
+curl -L "https://cog.api.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file&redirect=true" \
   -H "X-API-Key: ck_your_api_key" \
   --output arquivo.zip
 ```
@@ -1255,7 +1261,7 @@ Get complete tweet information including author, stats, and media.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
+curl -X GET "https://cog.api.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1331,11 +1337,11 @@ Get direct download links for best quality media.
 
 ```bash
 # Get download links as JSON
-curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
+curl -X GET "https://cog.api.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
   -H "X-API-Key: ck_your_api_key"
 
 # Redirect directly to first media
-curl -L "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890&redirect=true" \
+curl -L "https://cog.api.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890&redirect=true" \
   -H "X-API-Key: ck_your_api_key" \
   --output video.mp4
 ```
@@ -1387,7 +1393,7 @@ Search for anything on the web.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/search?q=artificial+intelligence&max=5" \
+curl -X GET "https://cog.api.br/api/v1/search?q=artificial+intelligence&max=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1433,7 +1439,7 @@ Search for recent news articles.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/search/news?q=technology+brazil&max=5" \
+curl -X GET "https://cog.api.br/api/v1/search/news?q=technology+brazil&max=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1481,7 +1487,7 @@ Search for apps on both stores in a single request.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/search?q=whatsapp&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/search?q=whatsapp&num=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1535,7 +1541,7 @@ Search only on Google Play Store.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/playstore?q=games&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/playstore?q=games&num=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1548,7 +1554,7 @@ Search only on Apple App Store.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/appstore?q=music&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/appstore?q=music&num=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1566,7 +1572,7 @@ Get detailed information about a specific app.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
+curl -X GET "https://cog.api.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1612,8 +1618,287 @@ Get apps similar to a specific app.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
   -H "X-API-Key: ck_your_api_key"
+```
+
+---
+
+## Free Fire Likes
+
+> **⚠️ Premium Feature:** Requires API key with daily limit > 500 requests (Unlimited or Bot plan)
+
+Send likes to Free Fire players.
+
+### Free Fire Service Info
+
+Get information about the Free Fire Likes service.
+
+**Endpoint:** `GET /api/v1/freefire/info`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/freefire/info" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "service": "Free Fire Likes",
+  "description": "Envio de likes para jogadores de Free Fire",
+  "endpoint": "/api/v1/freefire/sendlikes",
+  "parameters": {
+    "playerId": {
+      "type": "string",
+      "required": true,
+      "description": "ID do jogador (UID) - 8 a 10 dígitos",
+      "example": "1033857091"
+    }
+  },
+  "rules": {
+    "minLikes": 100,
+    "minLikesDescription": "Apenas solicitações que enviam 100+ likes são contabilizadas",
+    "usageLimit": "Definido pela chave externa fornecida"
+  }
+}
+```
+
+### Send Free Fire Likes
+
+Send likes to a Free Fire player by their UID.
+
+**Endpoint:** `GET /api/v1/freefire/sendlikes`
+
+**Query Parameters:**
+- `playerId` (string, required): Player UID (8-10 digits)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/freefire/sendlikes?playerId=1033857091" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response (Success - 100+ likes):**
+
+```json
+{
+  "success": true,
+  "data": {
+    "player": "#Regiis7x'ㅤ⁑",
+    "uid": "1033857091",
+    "region": "BR",
+    "initialLikes": 15162,
+    "finalLikes": 15362,
+    "likesAdded": 200,
+    "level": 72,
+    "exp": 3502529,
+    "status": 1,
+    "timestamp": "11/12/2024 14:30:00",
+    "usageCounted": true,
+    "minLikesRequired": 100,
+    "usageStatus": "CONTABILIZADO (100+ likes enviados)",
+    "keystats": "1/100"
+  },
+  "error": null,
+  "message": "Likes enviados com sucesso"
+}
+```
+
+**Example Response (Less than 100 likes):**
+
+```json
+{
+  "success": false,
+  "data": {
+    "player": "#PlayerName",
+    "uid": "1033857091",
+    "region": "BR",
+    "initialLikes": 100,
+    "finalLikes": 150,
+    "likesAdded": 50,
+    "level": 72,
+    "exp": 3502529,
+    "status": 1,
+    "timestamp": "11/12/2024 14:30:00",
+    "usageCounted": false,
+    "minLikesRequired": 100,
+    "usageStatus": "NÃO CONTABILIZADO (menos de 100 likes)",
+    "keystats": "0/100"
+  },
+  "error": "INSUFFICIENT_LIKES",
+  "message": "Menos de 100 likes foram enviados"
+}
+```
+
+**Important Rules:**
+- Only requests sending **100+ likes** are counted toward limits
+- Requires API key with daily limit > 500 requests
+- Player UID must be valid (8-10 digits)
+
+**Error Codes:**
+- `INVALID_PLAYER_ID` (400): Invalid player UID
+- `Acesso negado` (403): Insufficient API key limit
+- `player_not_found` (404): Player not found
+- `INSUFFICIENT_LIKES` (400): Less than 100 likes sent
+- `KEY_EXPIRED` (403): External API key expired
+- `LIMIT_EXCEEDED` (403): Daily limit exceeded
+
+---
+
+## Data Queries
+
+> **⚠️ Premium Feature:** Requires API key with daily limit > 500 requests (Unlimited or Bot plan)
+
+Perform data queries via Telegram bot integration.
+
+### Query Status
+
+Check the status of the Telegram connection.
+
+**Endpoint:** `GET /api/v1/consulta/status`
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/consulta/status" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "status": "connected",
+  "message": "Telegram bot is connected and ready",
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+### Perform Data Query
+
+Execute a data query using the Telegram bot.
+
+**Endpoint:** `GET /api/v1/consulta`
+
+**Query Parameters:**
+- `type` (string, required): Type of query
+- `dados` (string, required): Data to query
+
+**Available Query Types:**
+- `cpf` - Query by CPF (full number)
+- `nome` - Query by name
+- `telefone` - Query by phone number
+- `email` - Query by email
+- `placa` - Query by vehicle plate
+- `chassi` - Query by vehicle chassis
+- `cnpj` - Query by CNPJ (company registration)
+- `cep` - Query by postal code
+- `titulo` - Query by voter registration
+- `pai` - Query by father's name
+- `mae` - Query by mother's name
+- `vizinhos` - Query neighbors by CPF
+- `proprietario` - Query owner by CPF
+- `empregos` - Query jobs by CPF
+- `vacinas` - Query vaccines by CPF
+- `beneficios` - Query benefits by CPF
+- `internet` - Query internet by CPF
+- `parentes` - Query relatives by CPF
+- `enderecos` - Query addresses by CPF
+- `obito` - Query death record by CPF
+- `score` - Query credit score by CPF
+- `compras` - Query purchases by CPF
+- `cnh` - Query driver's license by CPF
+- `funcionarios` - Query employees by CNPJ
+
+**Example Request (CPF Query):**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/consulta?type=cpf&dados=00000000000" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Request (Name Query):**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/consulta?type=nome&dados=Jo%C3%A3o%20Silva" \
+  -H "X-API-Key: ck_your_api_key"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "type": "cpf",
+    "query": "000.000.000-00",
+    "resultado": "...query results...",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+**Error Codes:**
+- `Acesso negado` (403): Insufficient API key limit (requires > 500/day)
+- `MISSING_PARAMETERS` (400): Missing required parameters
+- `INVALID_TYPE` (400): Invalid query type
+- `TELEGRAM_ERROR` (503): Telegram bot connection error
+
+**Code Examples:**
+
+**Node.js:**
+```javascript
+const axios = require('axios');
+
+async function queryData(type, data) {
+  try {
+    const response = await axios.get('https://cog.api.br/api/v1/consulta', {
+      params: { type, dados: data },
+      headers: { 'X-API-Key': 'ck_your_api_key' }
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
+}
+
+// Query by CPF
+queryData('cpf', '00000000000');
+
+// Query by name
+queryData('nome', 'João Silva');
+```
+
+**Python:**
+```python
+import requests
+
+def query_data(query_type, data):
+    url = 'https://cog.api.br/api/v1/consulta'
+    headers = {'X-API-Key': 'ck_your_api_key'}
+    params = {'type': query_type, 'dados': data}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        print(response.json())
+        return response.json()
+    else:
+        print(f"Error: {response.json()}")
+        return None
+
+# Query by CPF
+query_data('cpf', '00000000000')
+
+# Query by phone
+query_data('telefone', '11999999999')
 ```
 
 ---
@@ -1632,7 +1917,7 @@ Get your API key usage and limits.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/status?include_chart=true" \
+curl -X GET "https://cog.api.br/api/v1/status?include_chart=true" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1710,7 +1995,7 @@ Check API health status.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/status/health" \
+curl -X GET "https://cog.api.br/api/v1/status/health" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1726,7 +2011,7 @@ Get usage statistics for all models.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/status/models?days=7" \
+curl -X GET "https://cog.api.br/api/v1/status/models?days=7" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1739,7 +2024,7 @@ Get detailed statistics for a specific model.
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/api/v1/status/microsoft/phi-3-medium-128k-instruct?days=7" \
+curl -X GET "https://cog.api.br/api/v1/status/microsoft/phi-3-medium-128k-instruct?days=7" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1778,7 +2063,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="ck_your_api_key",
-    base_url="https://cog2.cognima.com.br/openai/v1"
+    base_url="https://cog.api.br/openai/v1"
 )
 
 response = client.chat.completions.create(
@@ -1794,7 +2079,7 @@ print(response.choices[0].message.content)
 **Example with curl:**
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/openai/v1/chat/completions" \
+curl -X POST "https://cog.api.br/openai/v1/chat/completions" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1810,7 +2095,7 @@ curl -X POST "https://cog2.cognima.com.br/openai/v1/chat/completions" \
 **Example Request:**
 
 ```bash
-curl -X GET "https://cog2.cognima.com.br/openai/v1/models" \
+curl -X GET "https://cog.api.br/openai/v1/models" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -1894,7 +2179,7 @@ const axios = require('axios');
 async function chatCompletion() {
   try {
     const response = await axios.post(
-      'https://cog2.cognima.com.br/api/v1/completion',
+      'https://cog.api.br/api/v1/completion',
       {
         model: 'microsoft/phi-3-medium-128k-instruct',
         messages: [
@@ -1928,7 +2213,7 @@ chatCompletion();
 import requests
 
 def chat_completion():
-    url = 'https://cog2.cognima.com.br/api/v1/completion'
+    url = 'https://cog.api.br/api/v1/completion'
     headers = {
         'X-API-Key': 'ck_your_api_key',
         'Content-Type': 'application/json'
@@ -1957,7 +2242,7 @@ chat_completion()
 
 ```python
 def use_custom_model():
-    url = 'https://cog2.cognima.com.br/api/v1/completion'
+    url = 'https://cog.api.br/api/v1/completion'
     headers = {
         'X-API-Key': 'ck_your_api_key',
         'Content-Type': 'application/json'
@@ -1979,7 +2264,7 @@ use_custom_model()
 
 ```python
 def download_tiktok():
-    url = 'https://cog2.cognima.com.br/api/v1/tiktok/download'
+    url = 'https://cog.api.br/api/v1/tiktok/download'
     headers = {
         'X-API-Key': 'ck_your_api_key',
         'Content-Type': 'application/json'
@@ -2006,7 +2291,7 @@ download_tiktok()
 <?php
 
 function chatCompletion() {
-    $url = 'https://cog2.cognima.com.br/api/v1/completion';
+    $url = 'https://cog.api.br/api/v1/completion';
     $apiKey = 'ck_your_api_key';
     
     $data = [
@@ -2047,7 +2332,7 @@ chatCompletion();
 #### Create Custom Model
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/custom" \
+curl -X POST "https://cog.api.br/api/v1/custom" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -2060,7 +2345,7 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/custom" \
 #### Search Lyrics
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/lyrics/search" \
+curl -X POST "https://cog.api.br/api/v1/lyrics/search" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"query": "wonderwall oasis"}'
@@ -2069,7 +2354,7 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/lyrics/search" \
 #### Download Instagram
 
 ```bash
-curl -X POST "https://cog2.cognima.com.br/api/v1/instagram/download" \
+curl -X POST "https://cog.api.br/api/v1/instagram/download" \
   -H "X-API-Key: ck_your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.instagram.com/p/ABC123xyz/"}'
@@ -2079,11 +2364,11 @@ curl -X POST "https://cog2.cognima.com.br/api/v1/instagram/download" \
 
 ```bash
 # Get file info
-curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+curl -X GET "https://cog.api.br/api/v1/gdrive/info?url=https://drive.google.com/file/d/1ABC123xyz/view" \
   -H "X-API-Key: ck_your_api_key"
 
 # Download file
-curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
+curl -X GET "https://cog.api.br/api/v1/gdrive/download?url=https://drive.google.com/file/d/1ABC123xyz/view" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -2091,11 +2376,11 @@ curl -X GET "https://cog2.cognima.com.br/api/v1/gdrive/download?url=https://driv
 
 ```bash
 # Get file info
-curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+curl -X GET "https://cog.api.br/api/v1/mediafire/info?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
   -H "X-API-Key: ck_your_api_key"
 
 # Download file
-curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
+curl -X GET "https://cog.api.br/api/v1/mediafire/download?url=https://www.mediafire.com/file/abc123xyz/arquivo.zip/file" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -2103,11 +2388,11 @@ curl -X GET "https://cog2.cognima.com.br/api/v1/mediafire/download?url=https://w
 
 ```bash
 # Get tweet info
-curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
+curl -X GET "https://cog.api.br/api/v1/twitter/info?url=https://twitter.com/user/status/1234567890" \
   -H "X-API-Key: ck_your_api_key"
 
 # Download media
-curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
+curl -X GET "https://cog.api.br/api/v1/twitter/download?url=https://twitter.com/user/status/1234567890" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -2115,11 +2400,11 @@ curl -X GET "https://cog2.cognima.com.br/api/v1/twitter/download?url=https://twi
 
 ```bash
 # General web search
-curl -X GET "https://cog2.cognima.com.br/api/v1/search?q=artificial+intelligence&max=10" \
+curl -X GET "https://cog.api.br/api/v1/search?q=artificial+intelligence&max=10" \
   -H "X-API-Key: ck_your_api_key"
 
 # News search
-curl -X GET "https://cog2.cognima.com.br/api/v1/search/news?q=technology+news&max=5" \
+curl -X GET "https://cog.api.br/api/v1/search/news?q=technology+news&max=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -2127,23 +2412,23 @@ curl -X GET "https://cog2.cognima.com.br/api/v1/search/news?q=technology+news&ma
 
 ```bash
 # Search both stores (Play Store + App Store)
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/search?q=whatsapp&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/search?q=whatsapp&num=5" \
   -H "X-API-Key: ck_your_api_key"
 
 # Search Play Store only
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/playstore?q=games&num=10" \
+curl -X GET "https://cog.api.br/api/v1/apps/playstore?q=games&num=10" \
   -H "X-API-Key: ck_your_api_key"
 
 # Search App Store only
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/appstore?q=music&num=10" \
+curl -X GET "https://cog.api.br/api/v1/apps/appstore?q=music&num=10" \
   -H "X-API-Key: ck_your_api_key"
 
 # Get app details
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
+curl -X GET "https://cog.api.br/api/v1/apps/details?appId=com.whatsapp&store=playStore" \
   -H "X-API-Key: ck_your_api_key"
 
 # Get similar apps
-curl -X GET "https://cog2.cognima.com.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
+curl -X GET "https://cog.api.br/api/v1/apps/similar?appId=com.whatsapp&store=playStore&num=5" \
   -H "X-API-Key: ck_your_api_key"
 ```
 
@@ -2204,14 +2489,21 @@ try {
 For questions, issues, or feature requests:
 
 - **Email**: support@cognima.com.br
-- **Documentation**: https://cog2.cognima.com.br/docs
-- **Status Page**: https://cog2.cognima.com.br/status
+- **Documentation**: https://cog.api.br/docs
+- **Status Page**: https://cog.api.br/status
 
 ---
 
 ## Changelog
 
-### Version 2.3.0 (Current)
+### Version 2.4.0 (Current)
+
+- ✨ Free Fire Likes API (premium feature)
+- ✨ Data Queries via Telegram integration (premium feature)
+- 🔧 Premium features require API key with daily limit > 500
+- 🔧 New plan requirements for advanced features
+
+### Version 2.3.0
 
 - ✨ App Store search API (Google Play + Apple App Store)
 - ✨ App details and similar apps endpoints
