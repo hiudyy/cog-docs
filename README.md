@@ -52,6 +52,38 @@ Welcome to the Cognima API documentation! This guide provides detailed informati
   - [Search One Track](#search-one-soundcloud-track)
   - [Download Track](#download-soundcloud-track)
   - [Search and Download](#search-and-download-soundcloud)
+- [Facebook Download](#facebook-download)
+  - [Download Video](#download-facebook-video)
+  - [Download HD Video](#download-facebook-hd-video)
+- [Reddit Download](#reddit-download)
+  - [Download Media](#download-reddit-media)
+  - [Get Post Info](#get-reddit-post-info)
+- [Twitch Download](#twitch-download)
+  - [Download Clip/VOD](#download-twitch-clip-vod)
+  - [Get Formats](#get-twitch-formats)
+  - [Get Video Info](#get-twitch-video-info)
+- [Vimeo Download](#vimeo-download)
+  - [Download Video](#download-vimeo-video)
+  - [Get Formats](#get-vimeo-formats)
+  - [Get Video Info](#get-vimeo-video-info)
+- [Dailymotion Download](#dailymotion-download)
+  - [Download Video](#download-dailymotion-video)
+  - [Get Formats](#get-dailymotion-formats)
+  - [Get Video Info](#get-dailymotion-video-info)
+- [Streamable Download](#streamable-download)
+  - [Download Video](#download-streamable-video)
+  - [Get Formats](#get-streamable-formats)
+  - [Get Video Info](#get-streamable-video-info)
+- [Bandcamp Download](#bandcamp-download)
+  - [Download Track/Album](#download-bandcamp-track-album)
+  - [Get Formats](#get-bandcamp-formats)
+  - [Get Track Info](#get-bandcamp-track-info)
+- [Likee Download](#likee-download)
+  - [Download Video](#download-likee-video)
+  - [Get Video Info](#get-likee-video-info)
+- [Universal Download (AllDL)](#universal-download-alldl)
+  - [Download All Media](#download-all-media)
+  - [Download by Type](#download-by-type)
 - [Data Queries](#data-queries)
   - [Query Status](#query-status)
   - [Perform Query](#perform-data-query)
@@ -2101,6 +2133,895 @@ curl -X GET "https://cog.api.br/api/v1/soundcloud/search-download?q=te%20vi%20de
 **Error Codes:**
 - `400` - Missing search parameter or invalid URL
 - `500` - Error searching/downloading from SoundCloud or internal error
+
+---
+
+## Facebook Download
+
+Download videos from Facebook with multiple quality options.
+
+### Download Facebook Video
+
+Download a Facebook video with all available quality options.
+
+**Endpoint:** `GET /api/v1/facebook/download`
+
+**Query Parameters:**
+- `url` (string, required): Facebook video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/facebook/download?url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fr%2F14RStacRcih%2F"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Facebook",
+  "videos": [
+    {
+      "resolution": "720p (HD)",
+      "thumbnail": "https://scontent-vie1-1.xx.fbcdn.net/...",
+      "url": "https://d.rapidcdn.app/v2?token=...",
+      "shouldRender": false
+    },
+    {
+      "resolution": "1080p",
+      "thumbnail": "https://scontent-vie1-1.xx.fbcdn.net/...",
+      "url": "/render.php?token=...",
+      "shouldRender": true
+    }
+  ]
+}
+```
+
+### Download Facebook HD Video
+
+Download a Facebook video in the best available quality (HD preferred).
+
+**Endpoint:** `GET /api/v1/facebook/download-hd`
+
+**Query Parameters:**
+- `url` (string, required): Facebook video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/facebook/download-hd?url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fr%2F14RStacRcih%2F"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Facebook",
+  "video": {
+    "resolution": "1080p",
+    "thumbnail": "https://scontent-vie1-1.xx.fbcdn.net/...",
+    "url": "/render.php?token=...",
+    "shouldRender": true
+  },
+  "allQualities": [
+    {
+      "resolution": "720p (HD)",
+      "thumbnail": "https://scontent-vie1-1.xx.fbcdn.net/...",
+      "url": "https://d.rapidcdn.app/v2?token=...",
+      "shouldRender": false
+    },
+    {
+      "resolution": "1080p",
+      "thumbnail": "https://scontent-vie1-1.xx.fbcdn.net/...",
+      "url": "/render.php?token=...",
+      "shouldRender": true
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- `success` (boolean): Request status
+- `platform` (string): Always "Facebook"
+- `videos` (array): Array of video quality options (only in `/download`)
+- `video` (object): Best quality video (only in `/download-hd`)
+- `allQualities` (array): All available qualities (only in `/download-hd`)
+- `resolution` (string): Video resolution (e.g., "720p (HD)", "1080p")
+- `thumbnail` (string): Video thumbnail URL
+- `url` (string): Direct download link
+- `shouldRender` (boolean): Whether the URL needs server-side rendering
+
+**Supported URL Formats:**
+- `https://www.facebook.com/share/r/...`
+- `https://www.facebook.com/watch?v=...`
+- `https://fb.watch/...`
+- `https://www.facebook.com/username/videos/...`
+
+**Error Codes:**
+- `400` - Missing URL parameter or invalid Facebook URL
+- `500` - Error downloading from Facebook or internal error
+
+---
+
+## Reddit Download
+
+Download videos and media from Reddit posts using yt-dlp.
+
+### Download Reddit Media
+
+Download video or media from a Reddit post.
+
+**Endpoint:** `GET /api/v1/reddit/download`
+
+**Query Parameters:**
+- `url` (string, required): Reddit post URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/reddit/download?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fvideos%2Fcomments%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Reddit",
+  "data": {
+    "title": "Amazing video title",
+    "author": "username",
+    "subreddit": "videos",
+    "thumbnail": "https://...",
+    "duration": 45,
+    "downloadUrl": "https://...",
+    "isVideo": true,
+    "upvotes": 1250,
+    "comments": 85
+  }
+}
+```
+
+### Get Reddit Post Info
+
+Get information about a Reddit post without downloading.
+
+**Endpoint:** `GET /api/v1/reddit/info`
+
+**Query Parameters:**
+- `url` (string, required): Reddit post URL
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Reddit",
+  "info": {
+    "title": "Amazing video title",
+    "author": "username",
+    "subreddit": "videos",
+    "thumbnail": "https://...",
+    "duration": 45,
+    "description": "Post description",
+    "timestamp": 1640000000,
+    "isVideo": true,
+    "upvotes": 1250,
+    "comments": 85,
+    "url": "https://reddit.com/..."
+  }
+}
+```
+
+---
+
+## Twitch Download
+
+Download clips and VODs from Twitch using yt-dlp.
+
+### Download Twitch Clip/VOD
+
+Download a Twitch clip or VOD.
+
+**Endpoint:** `GET /api/v1/twitch/download`
+
+**Query Parameters:**
+- `url` (string, required): Twitch clip or VOD URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/twitch/download?url=https%3A%2F%2Fwww.twitch.tv%2Fvideos%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Twitch",
+  "data": {
+    "title": "Epic Gaming Moment",
+    "streamer": "StreamerName",
+    "thumbnail": "https://...",
+    "duration": 120,
+    "downloadUrl": "https://...",
+    "type": "clip",
+    "views": 5000,
+    "timestamp": 1640000000,
+    "game": "Game Name"
+  }
+}
+```
+
+### Get Twitch Formats
+
+Get available quality formats for a Twitch video.
+
+**Endpoint:** `GET /api/v1/twitch/formats`
+
+**Query Parameters:**
+- `url` (string, required): Twitch clip or VOD URL
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Twitch",
+  "formats": [
+    {
+      "formatId": "source",
+      "quality": "1920x1080",
+      "ext": "mp4",
+      "filesize": 50000000,
+      "url": "https://..."
+    },
+    {
+      "formatId": "720p60",
+      "quality": "1280x720",
+      "ext": "mp4",
+      "filesize": 30000000,
+      "url": "https://..."
+    }
+  ]
+}
+```
+
+### Get Twitch Video Info
+
+Get information about a Twitch clip or VOD.
+
+**Endpoint:** `GET /api/v1/twitch/info`
+
+**Query Parameters:**
+- `url` (string, required): Twitch clip or VOD URL
+
+---
+
+## Vimeo Download
+
+Download videos from Vimeo using yt-dlp.
+
+### Download Vimeo Video
+
+Download a video from Vimeo.
+
+**Endpoint:** `GET /api/v1/vimeo/download`
+
+**Query Parameters:**
+- `url` (string, required): Vimeo video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/vimeo/download?url=https%3A%2F%2Fvimeo.com%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Vimeo",
+  "data": {
+    "title": "Beautiful Short Film",
+    "author": "Creator Name",
+    "thumbnail": "https://...",
+    "duration": 180,
+    "downloadUrl": "https://...",
+    "description": "Film description",
+    "views": 10000,
+    "likes": 500,
+    "timestamp": 1640000000,
+    "width": 1920,
+    "height": 1080,
+    "quality": "1080p"
+  }
+}
+```
+
+### Get Vimeo Formats
+
+Get available quality formats for a Vimeo video.
+
+**Endpoint:** `GET /api/v1/vimeo/formats`
+
+**Query Parameters:**
+- `url` (string, required): Vimeo video URL
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Vimeo",
+  "formats": [
+    {
+      "formatId": "http-1080p",
+      "quality": "1920x1080",
+      "ext": "mp4",
+      "filesize": 80000000,
+      "url": "https://..."
+    },
+    {
+      "formatId": "http-720p",
+      "quality": "1280x720",
+      "ext": "mp4",
+      "filesize": 45000000,
+      "url": "https://..."
+    }
+  ]
+}
+```
+
+### Get Vimeo Video Info
+
+Get information about a Vimeo video.
+
+**Endpoint:** `GET /api/v1/vimeo/info`
+
+**Query Parameters:**
+- `url` (string, required): Vimeo video URL
+
+**Response Fields:**
+- All platforms use yt-dlp for reliable downloads
+- Supports multiple quality options
+- Includes metadata (views, likes, duration, etc.)
+- Error handling with detailed messages
+
+**Supported URL Formats:**
+- **Reddit**: `reddit.com/r/subreddit/comments/...`, `redd.it/...`
+- **Twitch**: `twitch.tv/videos/...`, `twitch.tv/username/clip/...`, `clips.twitch.tv/...`
+- **Vimeo**: `vimeo.com/...`
+
+**Error Codes:**
+- `400` - Missing URL parameter or invalid URL format
+- `500` - Error downloading or internal error
+
+---
+
+## Dailymotion Download
+
+Download videos from Dailymotion using yt-dlp.
+
+### Download Dailymotion Video
+
+Download a video from Dailymotion.
+
+**Endpoint:** `GET /api/v1/dailymotion/download`
+
+**Query Parameters:**
+- `url` (string, required): Dailymotion video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/dailymotion/download?url=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Dailymotion",
+  "data": {
+    "title": "Amazing Video Title",
+    "author": "Channel Name",
+    "thumbnail": "https://...",
+    "duration": 240,
+    "downloadUrl": "https://...",
+    "description": "Video description",
+    "views": 15000,
+    "timestamp": 1640000000,
+    "width": 1920,
+    "height": 1080,
+    "quality": "1080p"
+  }
+}
+```
+
+### Get Dailymotion Formats
+
+Get available quality formats for a Dailymotion video.
+
+**Endpoint:** `GET /api/v1/dailymotion/formats`
+
+**Query Parameters:**
+- `url` (string, required): Dailymotion video URL
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Dailymotion",
+  "formats": [
+    {
+      "formatId": "1080",
+      "quality": "1920x1080",
+      "ext": "mp4",
+      "filesize": 120000000,
+      "url": "https://..."
+    },
+    {
+      "formatId": "720",
+      "quality": "1280x720",
+      "ext": "mp4",
+      "filesize": 70000000,
+      "url": "https://..."
+    }
+  ]
+}
+```
+
+### Get Dailymotion Video Info
+
+Get information about a Dailymotion video.
+
+**Endpoint:** `GET /api/v1/dailymotion/info`
+
+**Query Parameters:**
+- `url` (string, required): Dailymotion video URL
+
+---
+
+## Streamable Download
+
+Download videos from Streamable using yt-dlp.
+
+### Download Streamable Video
+
+Download a video from Streamable.
+
+**Endpoint:** `GET /api/v1/streamable/download`
+
+**Query Parameters:**
+- `url` (string, required): Streamable video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/streamable/download?url=https%3A%2F%2Fstreamable.com%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Streamable",
+  "data": {
+    "title": "Streamable Video",
+    "thumbnail": "https://...",
+    "duration": 30,
+    "downloadUrl": "https://...",
+    "description": "Video description",
+    "timestamp": 1640000000,
+    "width": 1280,
+    "height": 720,
+    "quality": "720p",
+    "filesize": 25000000
+  }
+}
+```
+
+### Get Streamable Formats
+
+Get available quality formats for a Streamable video.
+
+**Endpoint:** `GET /api/v1/streamable/formats`
+
+**Query Parameters:**
+- `url` (string, required): Streamable video URL
+
+### Get Streamable Video Info
+
+Get information about a Streamable video.
+
+**Endpoint:** `GET /api/v1/streamable/info`
+
+**Query Parameters:**
+- `url` (string, required): Streamable video URL
+
+---
+
+## Bandcamp Download
+
+Download music and albums from Bandcamp using yt-dlp.
+
+### Download Bandcamp Track/Album
+
+Download a track or album from Bandcamp.
+
+**Endpoint:** `GET /api/v1/bandcamp/download`
+
+**Query Parameters:**
+- `url` (string, required): Bandcamp track or album URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/bandcamp/download?url=https%3A%2F%2Fartist.bandcamp.com%2Ftrack%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Bandcamp",
+  "data": {
+    "title": "Song Title",
+    "artist": "Artist Name",
+    "album": "Album Name",
+    "thumbnail": "https://...",
+    "duration": 210,
+    "downloadUrl": "https://...",
+    "description": "Track description",
+    "releaseDate": "2024-01-01",
+    "genre": "Electronic",
+    "track": "Song Title",
+    "trackNumber": 1,
+    "ext": "mp3"
+  }
+}
+```
+
+### Get Bandcamp Formats
+
+Get available formats for a Bandcamp track.
+
+**Endpoint:** `GET /api/v1/bandcamp/formats`
+
+**Query Parameters:**
+- `url` (string, required): Bandcamp track URL
+
+### Get Bandcamp Track Info
+
+Get information about a Bandcamp track or album.
+
+**Endpoint:** `GET /api/v1/bandcamp/info`
+
+**Query Parameters:**
+- `url` (string, required): Bandcamp track or album URL
+
+---
+
+## Likee Download
+
+Download videos from Likee using yt-dlp.
+
+### Download Likee Video
+
+Download a video from Likee.
+
+**Endpoint:** `GET /api/v1/likee/download`
+
+**Query Parameters:**
+- `url` (string, required): Likee video URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/likee/download?url=https%3A%2F%2Flikee.video%2F..."
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Likee",
+  "data": {
+    "title": "Likee Video",
+    "author": "Username",
+    "thumbnail": "https://...",
+    "duration": 15,
+    "downloadUrl": "https://...",
+    "description": "Video description",
+    "views": 5000,
+    "likes": 250,
+    "comments": 30,
+    "timestamp": 1640000000,
+    "width": 1080,
+    "height": 1920
+  }
+}
+```
+
+### Get Likee Video Info
+
+Get information about a Likee video.
+
+**Endpoint:** `GET /api/v1/likee/info`
+
+**Query Parameters:**
+- `url` (string, required): Likee video URL
+
+**Response Fields:**
+- All platforms use yt-dlp for reliable downloads
+- Supports multiple quality options where available
+- Includes metadata (views, likes, duration, etc.)
+- Error handling with detailed messages
+
+**Supported URL Formats:**
+- **Dailymotion**: `dailymotion.com/video/...`, `dai.ly/...`
+- **Streamable**: `streamable.com/...`
+- **Bandcamp**: `artist.bandcamp.com/track/...`, `artist.bandcamp.com/album/...`
+- **Likee**: `likee.video/...`, `likee.com/...`
+
+**Error Codes:**
+- `400` - Missing URL parameter or invalid URL format
+- `500` - Error downloading or internal error
+
+---
+
+## Universal Download (AllDL)
+
+Universal download endpoint that extracts **all available media** from any URL supported by yt-dlp. Returns an array with videos, audio tracks, and images, each with its URL and type.
+
+### Download All Media
+
+Extract all available media (video, audio, images) from any supported URL.
+
+**Endpoint:** `GET /api/v1/alldl`
+
+**Query Parameters:**
+- `url` (string, required): Any URL supported by yt-dlp
+
+**Supported Platforms:**
+- YouTube, Vimeo, Dailymotion, Twitch, TikTok, Instagram, Facebook
+- Twitter/X, Reddit, Streamable, Bandcamp, SoundCloud, Spotify
+- Likee, and 1000+ other sites
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/alldl?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "metadata": {
+      "title": "Video Title",
+      "description": "Video description",
+      "duration": 213,
+      "uploader": "Channel Name",
+      "uploadDate": "20240101",
+      "views": 1000000,
+      "likes": 50000,
+      "webpage": "https://...",
+      "platform": "youtube"
+    },
+    "media": [
+      {
+        "type": "video",
+        "url": "https://...",
+        "quality": "best",
+        "format": "mp4",
+        "filesize": 50000000,
+        "resolution": "1920x1080",
+        "duration": 213,
+        "title": "Video Title",
+        "description": "Best quality available",
+        "isBest": true
+      },
+      {
+        "type": "video",
+        "url": "https://...",
+        "quality": "1920x1080",
+        "format": "mp4",
+        "filesize": 48000000,
+        "resolution": "1920x1080",
+        "fps": 30,
+        "vcodec": "h264",
+        "acodec": "aac",
+        "formatId": "137+140"
+      },
+      {
+        "type": "video",
+        "url": "https://...",
+        "quality": "1280x720",
+        "format": "mp4",
+        "filesize": 25000000,
+        "resolution": "1280x720",
+        "fps": 30,
+        "vcodec": "h264",
+        "acodec": "aac",
+        "formatId": "136+140"
+      },
+      {
+        "type": "audio",
+        "url": "https://...",
+        "quality": "128kbps",
+        "format": "m4a",
+        "filesize": 3000000,
+        "acodec": "aac",
+        "abr": 128,
+        "asr": 44100,
+        "formatId": "140"
+      },
+      {
+        "type": "image",
+        "url": "https://i.ytimg.com/vi/.../maxresdefault.jpg",
+        "quality": "1280x720",
+        "width": 1280,
+        "height": 720,
+        "id": "maxresdefault"
+      },
+      {
+        "type": "image",
+        "url": "https://i.ytimg.com/vi/.../hqdefault.jpg",
+        "quality": "480x360",
+        "width": 480,
+        "height": 360,
+        "id": "hqdefault"
+      }
+    ],
+    "totalItems": 15,
+    "videoCount": 8,
+    "audioCount": 5,
+    "imageCount": 2
+  }
+}
+```
+
+**Response Fields:**
+
+- `metadata` - Video/content metadata
+  - `title` - Content title
+  - `description` - Content description
+  - `duration` - Duration in seconds
+  - `uploader` - Channel/uploader name
+  - `uploadDate` - Upload date (YYYYMMDD)
+  - `views` - View count
+  - `likes` - Like count
+  - `webpage` - Original webpage URL
+  - `platform` - Platform name (youtube, vimeo, etc.)
+
+- `media[]` - Array of all available media
+  - `type` - Media type: `video`, `audio`, or `image`
+  - `url` - Direct download URL
+  - `quality` - Quality description (resolution, bitrate, etc.)
+  - `format` - File extension (mp4, webm, m4a, jpg, etc.)
+  - `filesize` - File size in bytes (when available)
+  - `isBest` - True for the recommended best quality option
+
+- Video-specific fields:
+  - `resolution` - Video resolution (1920x1080, etc.)
+  - `fps` - Frames per second
+  - `vcodec` - Video codec (h264, vp9, etc.)
+  - `acodec` - Audio codec (aac, opus, etc.)
+  - `formatId` - Format identifier
+
+- Audio-specific fields:
+  - `acodec` - Audio codec
+  - `abr` - Audio bitrate in kbps
+  - `asr` - Audio sample rate
+
+- Image-specific fields:
+  - `width` - Image width in pixels
+  - `height` - Image height in pixels
+  - `id` - Thumbnail identifier
+
+- `totalItems` - Total number of media items
+- `videoCount` - Number of video formats
+- `audioCount` - Number of audio formats
+- `imageCount` - Number of images/thumbnails
+
+### Download by Type
+
+Get media filtered by type (video, audio, or image only).
+
+**Endpoint:** `GET /api/v1/alldl/type`
+
+**Query Parameters:**
+- `url` (string, required): Any URL supported by yt-dlp
+- `type` (string, required): Media type to filter - `video`, `audio`, or `image`
+
+**Example Request:**
+
+```bash
+# Get only audio tracks
+curl -X GET "https://cog.api.br/api/v1/alldl/type?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&type=audio"
+
+# Get only images/thumbnails
+curl -X GET "https://cog.api.br/api/v1/alldl/type?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&type=image"
+```
+
+**Example Response (audio only):**
+
+```json
+{
+  "success": true,
+  "data": {
+    "metadata": {
+      "title": "Video Title",
+      "description": "Video description",
+      "duration": 213,
+      "uploader": "Channel Name",
+      "platform": "youtube"
+    },
+    "media": [
+      {
+        "type": "audio",
+        "url": "https://...",
+        "quality": "128kbps",
+        "format": "m4a",
+        "filesize": 3000000,
+        "acodec": "aac",
+        "abr": 128,
+        "asr": 44100,
+        "formatId": "140"
+      },
+      {
+        "type": "audio",
+        "url": "https://...",
+        "quality": "96kbps",
+        "format": "webm",
+        "filesize": 2200000,
+        "acodec": "opus",
+        "abr": 96,
+        "asr": 48000,
+        "formatId": "251"
+      }
+    ],
+    "totalItems": 2
+  }
+}
+```
+
+**Use Cases:**
+
+1. **Download Manager** - Present all available quality options to users
+2. **Thumbnail Extractor** - Get all thumbnail sizes for a video
+3. **Audio Ripper** - Extract only audio tracks in various formats
+4. **Format Converter** - Choose specific codecs and resolutions
+5. **Bandwidth Optimization** - Select appropriate quality based on connection
+6. **Multi-Quality Player** - Implement adaptive streaming with multiple sources
+
+**Features:**
+
+- ✅ Universal support for 1000+ websites via yt-dlp
+- ✅ Returns ALL available formats (not just best quality)
+- ✅ Includes video, audio, and image URLs
+- ✅ Detailed metadata for each media item
+- ✅ Filter by media type (video/audio/image)
+- ✅ File size information when available
+- ✅ Codec and quality information
+- ✅ Thumbnail URLs in multiple resolutions
+
+**Error Codes:**
+- `400` - Missing URL parameter, invalid URL format, or invalid type parameter
+- `500` - Error extracting media or unsupported URL
 
 ---
 
