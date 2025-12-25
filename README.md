@@ -42,6 +42,16 @@ Welcome to the Cognima API documentation! This guide provides detailed informati
 - [Free Fire Likes](#free-fire-likes)
   - [Service Info](#free-fire-service-info)
   - [Send Likes](#send-free-fire-likes)
+- [Spotify Search](#spotify-search)
+  - [Search Tracks](#search-spotify-tracks)
+  - [Search One Track](#search-one-spotify-track)
+  - [Download Track](#download-spotify-track)
+  - [Search and Download](#search-and-download-spotify)
+- [SoundCloud Search](#soundcloud-search)
+  - [Search Tracks](#search-soundcloud-tracks)
+  - [Search One Track](#search-one-soundcloud-track)
+  - [Download Track](#download-soundcloud-track)
+  - [Search and Download](#search-and-download-soundcloud)
 - [Data Queries](#data-queries)
   - [Query Status](#query-status)
   - [Perform Query](#perform-data-query)
@@ -1704,6 +1714,396 @@ curl -X GET "https://cog.api.br/api/v1/freefire/sendlikes?playerId=1033857091" \
 
 ---
 
+## Spotify Search
+
+Search for tracks on Spotify.
+
+### Search Spotify Tracks
+
+Search for multiple tracks on Spotify.
+
+**Endpoint:** `GET /api/v1/spotify/search`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+- `limit` (number, optional): Number of results (default: 10, max: 50)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/spotify/search?q=te%20vi%20dançando&limit=5"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Spotify",
+  "query": "te vi dançando",
+  "total": 5,
+  "results": [
+    {
+      "index": 1,
+      "name": "te vi dançando",
+      "artists": "Braga",
+      "link": "https://open.spotify.com/track/0e950NUOTB4BIYXpeaqtzn"
+    },
+    {
+      "index": 2,
+      "name": "Te Vi Dançando",
+      "artists": "Matheus Fernandes",
+      "link": "https://open.spotify.com/track/..."
+    }
+  ]
+}
+```
+
+### Search One Spotify Track
+
+Search for a specific track (returns only the first result).
+
+**Endpoint:** `GET /api/v1/spotify/search-one`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/spotify/search-one?q=te%20vi%20dançando"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Spotify",
+  "query": "te vi dançando",
+  "result": {
+    "index": 1,
+    "name": "te vi dançando",
+    "artists": "Braga",
+    "link": "https://open.spotify.com/track/0e950NUOTB4BIYXpeaqtzn"
+  }
+}
+```
+
+**Response Fields:**
+- `success` (boolean): Request status
+- `platform` (string): Always "Spotify"
+- `query` (string): Search query used
+- `total` (number): Total results found (only in `/search`)
+- `results` (array): Array of tracks (only in `/search`)
+- `result` (object): Single track object (only in `/search-one`)
+- `index` (number): Result position
+- `name` (string): Track name
+- `artists` (string): Artist(s) name
+- `link` (string): Spotify track URL
+
+**Error Codes:**
+- `400` - Missing search parameter
+- `500` - Error searching Spotify or internal error
+
+### Download Spotify Track
+
+Download a track from Spotify by URL.
+
+**Endpoint:** `GET /api/v1/spotify/download`
+
+**Query Parameters:**
+- `url` (string, required): Spotify track URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/spotify/download?url=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F4irM0ZydWatEXDDC7SflXS"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Spotify",
+  "data": {
+    "title": "Te vi de canto",
+    "artists": [
+      "Rô Rosa"
+    ],
+    "albumImage": "https://i.scdn.co/image/ab67616d00001e02e1a461f6e0c4cafc6632a270",
+    "year": "2023",
+    "duration": "2:08",
+    "downloadUrl": "https://cdn-spotify.zm.io.vn/download/4irM0ZydWatEXDDC7SflXS/..."
+  }
+}
+```
+
+### Search and Download Spotify
+
+Search for a track and automatically download it (combines search + download).
+
+**Endpoint:** `GET /api/v1/spotify/search-download`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/spotify/search-download?q=te%20vi%20de%20canto"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "Spotify",
+  "query": "te vi de canto",
+  "track": {
+    "name": "Te vi de canto",
+    "artists": "Rô Rosa",
+    "link": "https://open.spotify.com/track/4irM0ZydWatEXDDC7SflXS"
+  },
+  "download": {
+    "title": "Te vi de canto",
+    "artists": [
+      "Rô Rosa"
+    ],
+    "albumImage": "https://i.scdn.co/image/ab67616d00001e02e1a461f6e0c4cafc6632a270",
+    "year": "2023",
+    "duration": "2:08",
+    "downloadUrl": "https://cdn-spotify.zm.io.vn/download/4irM0ZydWatEXDDC7SflXS/..."
+  }
+}
+```
+
+**Response Fields:**
+- `success` (boolean): Request status
+- `platform` (string): Always "Spotify"
+- `query` (string): Search query used
+- `track` (object): Track information from search
+  - `name` (string): Track name
+  - `artists` (string): Artist(s) name
+  - `link` (string): Spotify track URL
+- `download` (object): Download information
+  - `title` (string): Track title
+  - `artists` (array): Array of artist names
+  - `albumImage` (string): Album cover image URL
+  - `year` (string): Release year
+  - `duration` (string): Track duration (MM:SS)
+  - `downloadUrl` (string): Direct download link
+
+**Error Codes:**
+- `400` - Missing search parameter or invalid URL
+- `500` - Error searching/downloading from Spotify or internal error
+
+---
+
+## SoundCloud Search
+
+Search for tracks on SoundCloud.
+
+### Search SoundCloud Tracks
+
+Search for multiple tracks on SoundCloud.
+
+**Endpoint:** `GET /api/v1/soundcloud/search`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+- `limit` (number, optional): Number of results (default: 10, max: 50)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/soundcloud/search?q=te%20vi%20de%20canto&limit=5"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "SoundCloud",
+  "query": "te vi de canto",
+  "total": 5,
+  "results": [
+    {
+      "id": 1530874528,
+      "title": "Rô Rosa - Te vi de canto Prod. Patricio Sid.mp3",
+      "artist": 492888114,
+      "artwork": "https://i1.sndcdn.com/artworks-Y7UdYfaOQuI7ZG4F-N99dsQ-large.jpg",
+      "duration": 134,
+      "permalink_url": "https://soundcloud.com/jose-luiiz-ii/ro-rosa-te-vi-de-canto-prod",
+      "playback_count": 377571,
+      "likes_count": 5268,
+      "genre": "Unknown",
+      "created_at": "2023-06-05T00:01:08Z"
+    }
+  ]
+}
+```
+
+### Search One SoundCloud Track
+
+Search for a specific track (returns only the first result).
+
+**Endpoint:** `GET /api/v1/soundcloud/search-one`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/soundcloud/search-one?q=te%20vi%20de%20canto"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "SoundCloud",
+  "query": "te vi de canto",
+  "result": {
+    "id": 1530874528,
+    "title": "Rô Rosa - Te vi de canto Prod. Patricio Sid.mp3",
+    "artist": 492888114,
+    "artwork": "https://i1.sndcdn.com/artworks-Y7UdYfaOQuI7ZG4F-N99dsQ-large.jpg",
+    "duration": 134,
+    "permalink_url": "https://soundcloud.com/jose-luiiz-ii/ro-rosa-te-vi-de-canto-prod",
+    "playback_count": 377571,
+    "likes_count": 5268,
+    "genre": "Unknown",
+    "created_at": "2023-06-05T00:01:08Z"
+  }
+}
+```
+
+**Response Fields:**
+- `success` (boolean): Request status
+- `platform` (string): Always "SoundCloud"
+- `query` (string): Search query used
+- `total` (number): Total results found (only in `/search`)
+- `results` (array): Array of tracks (only in `/search`)
+- `result` (object): Single track object (only in `/search-one`)
+- `id` (number): SoundCloud track ID
+- `title` (string): Track title
+- `artist` (number): Artist ID
+- `artwork` (string): Track artwork URL
+- `duration` (number): Duration in seconds
+- `permalink_url` (string): SoundCloud track URL
+- `playback_count` (number): Number of plays
+- `likes_count` (number): Number of likes
+- `genre` (string): Track genre
+- `created_at` (string): Upload date
+
+**Error Codes:**
+- `400` - Missing search parameter
+- `500` - Error searching SoundCloud or internal error
+
+### Download SoundCloud Track
+
+Download a track from SoundCloud by URL.
+
+**Endpoint:** `GET /api/v1/soundcloud/download`
+
+**Query Parameters:**
+- `url` (string, required): SoundCloud track URL
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/soundcloud/download?url=https%3A%2F%2Fsoundcloud.com%2Fjose-luiiz-ii%2Fro-rosa-te-vi-de-canto-prod"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "SoundCloud",
+  "data": {
+    "title": "Rô Rosa - Te vi de canto Prod. Patricio Sid.mp3",
+    "artist": "@jose.7uiz",
+    "thumbnail": "https://i1.sndcdn.com/artworks-Y7UdYfaOQuI7ZG4F-N99dsQ-t500x500.jpg",
+    "downloadUrl": "https://cf-media.sndcdn.com/LUht8AzbUqDu.128.mp3?Policy=..."
+  }
+}
+```
+
+### Search and Download SoundCloud
+
+Search for a track and automatically download it (combines search + download).
+
+**Endpoint:** `GET /api/v1/soundcloud/search-download`
+
+**Query Parameters:**
+- `q` (string, required): Track name or artist (can also use: `query`, `name`)
+
+**Example Request:**
+
+```bash
+curl -X GET "https://cog.api.br/api/v1/soundcloud/search-download?q=te%20vi%20de%20canto"
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "platform": "SoundCloud",
+  "track": {
+    "id": 1530874528,
+    "title": "Rô Rosa - Te vi de canto Prod. Patricio Sid.mp3",
+    "artist": 492888114,
+    "artwork": "https://i1.sndcdn.com/artworks-Y7UdYfaOQuI7ZG4F-N99dsQ-large.jpg",
+    "duration": 134,
+    "permalink_url": "https://soundcloud.com/jose-luiiz-ii/ro-rosa-te-vi-de-canto-prod",
+    "playback_count": 377571,
+    "likes_count": 5268,
+    "genre": "Unknown",
+    "created_at": "2023-06-05T00:01:08Z"
+  },
+  "download": {
+    "title": "Rô Rosa - Te vi de canto Prod. Patricio Sid.mp3",
+    "artist": "@jose.7uiz",
+    "thumbnail": "https://i1.sndcdn.com/artworks-Y7UdYfaOQuI7ZG4F-N99dsQ-t500x500.jpg",
+    "downloadUrl": "https://cf-media.sndcdn.com/LUht8AzbUqDu.128.mp3?Policy=..."
+  }
+}
+```
+
+**Response Fields:**
+- `success` (boolean): Request status
+- `platform` (string): Always "SoundCloud"
+- `track` (object): Track information from search
+  - `id` (number): SoundCloud track ID
+  - `title` (string): Track title
+  - `artist` (number): Artist ID
+  - `artwork` (string): Track artwork URL
+  - `duration` (number): Duration in seconds
+  - `permalink_url` (string): SoundCloud track URL
+  - `playback_count` (number): Number of plays
+  - `likes_count` (number): Number of likes
+  - `genre` (string): Track genre
+  - `created_at` (string): Upload date
+- `download` (object): Download information
+  - `title` (string): Track title
+  - `artist` (string): Artist username
+  - `thumbnail` (string): Track thumbnail URL
+  - `downloadUrl` (string): Direct download link
+
+**Error Codes:**
+- `400` - Missing search parameter or invalid URL
+- `500` - Error searching/downloading from SoundCloud or internal error
+
+---
+
 ## Data Queries
 
 > **⚠️ Premium Feature:** Requires API key with daily limit > 500 requests (Unlimited or Bot plan)
@@ -2123,6 +2523,10 @@ Detailed field-level validation errors:
 
 ## Code Examples
 
+Full code examples are available in the `/examples` directory:
+- **Node.js**: `/examples/nodejs/`
+- **Python**: `/examples/python/`
+
 ### JavaScript/Node.js
 
 #### Chat Completion
@@ -2158,6 +2562,30 @@ async function chatCompletion() {
 chatCompletion();
 ```
 
+#### Spotify Search
+
+See full example: [`/examples/nodejs/spotify.js`](./examples/nodejs/spotify.js)
+
+```javascript
+const axios = require('axios');
+
+async function searchSpotify(query, limit = 10) {
+  const response = await axios.get(
+    'https://cog.api.br/api/v1/spotify/search',
+    {
+      params: { q: query, limit }
+    }
+  );
+  
+  const { results } = response.data;
+  results.forEach(track => {
+    console.log(`${track.name} - ${track.artists}`);
+    console.log(`Link: ${track.link}`);
+  });
+}
+
+searchSpotify('te vi dançando', 5);
+```
 
 ### Python
 
@@ -2212,6 +2640,27 @@ def use_custom_model():
     print(response.json())
 
 use_custom_model()
+```
+
+#### Spotify Search
+
+See full example: [`/examples/python/spotify.py`](./examples/python/spotify.py)
+
+```python
+import requests
+
+def search_spotify(query, limit=10):
+    response = requests.get(
+        'https://cog.api.br/api/v1/spotify/search',
+        params={'q': query, 'limit': limit}
+    )
+    
+    data = response.json()
+    for track in data['results']:
+        print(f"{track['name']} - {track['artists']}")
+        print(f"Link: {track['link']}")
+
+search_spotify('te vi dançando', 5)
 ```
 
 #### Download TikTok Video
