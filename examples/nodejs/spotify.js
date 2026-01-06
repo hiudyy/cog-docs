@@ -124,28 +124,34 @@ async function getRecommendations(query, count = 5) {
 /**
  * Download track from Spotify by URL
  * @param {string} url - Spotify track URL
+ * @param {string} outputPath - Optional path to save file
  */
-async function downloadTrack(url) {
+async function downloadTrack(url, outputPath = null) {
   try {
     console.log(`\n=== Downloading Track from Spotify ===\n`);
     console.log(`URL: ${url}\n`);
     
     const response = await axios.get(`${BASE_URL}/spotify/download`, {
-      params: { url }
+      params: { url },
+      responseType: 'arraybuffer' // Recebe arquivo binário diretamente
     });
     
-    const { success, data } = response.data;
+    console.log('✅ Download Completo!\n');
     
-    if (success) {
-      console.log('✅ Download Ready!\n');
-      console.log(`Title: ${data.title}`);
-      console.log(`Artists: ${data.artists.join(', ')}`);
-      console.log(`Album: ${data.year}`);
-      console.log(`Duration: ${data.duration}`);
-      console.log(`\n📥 Download URL: ${data.downloadUrl}`);
-      
-      return data;
+    // Se especificar caminho, salvar arquivo
+    if (outputPath) {
+      const fs = require('fs');
+      fs.writeFileSync(outputPath, response.data);
+      console.log(`💾 Arquivo salvo em: ${outputPath}`);
     }
+    
+    return {
+      success: true,
+      buffer: response.data,
+      size: response.data.length,
+      contentType: response.headers['content-type'],
+      filename: response.headers['content-disposition']?.match(/filename="(.+)"/)?.[1] || 'track.mp3'
+    };
   } catch (error) {
     console.error('Error:', error.response?.data || error.message);
     throw error;
@@ -155,32 +161,30 @@ async function downloadTrack(url) {
 /**
  * Search and download track automatically
  * @param {string} query - Track name or artist
+ * @param {string} outputPath - Optional path to save file
  */
-async function searchAndDownload(query) {
+async function searchAndDownload(query, outputPath = null) {
   try {
     console.log(`\n=== Searching and Downloading: "${query}" ===\n`);
     
-    const response = await axios.get(`${BASE_URL}/spotify/search-download`, {
+    // Primeiro busca para obter informações
+    const searchResponse = await axios.get(`${BASE_URL}/spotify/search-one`, {
       params: { q: query }
     });
     
-    const { success, track, download } = response.data;
+    const { result } = searchResponse.data;
     
-    if (success) {
-      console.log('✅ Track Found and Download Ready!\n');
-      console.log('🎵 Track Info:');
-      console.log(`   Name: ${track.name}`);
-      console.log(`   Artists: ${track.artists}`);
-      console.log(`   Link: ${track.link}`);
-      console.log('\n📥 Download Info:');
-      console.log(`   Title: ${download.title}`);
-      console.log(`   Artists: ${download.artists.join(', ')}`);
-      console.log(`   Album Image: ${download.albumImage}`);
-      console.log(`   Year: ${download.year}`);
-      console.log(`   Duration: ${download.duration}`);
-      console.log(`\n📥 Download URL: ${download.downloadUrl}`);
+    if (result) {
+      console.log('✅ Track Found!\n');
+      console.log(`   Name: ${result.name}`);
+      console.log(`   Artists: ${result.artists}`);
+      console.log(`   Link: ${result.link}\n`);
       
-      return { track, download };
+      // Agora faz o download
+      console.log('⬇️  Starting download...\n');
+      const downloadResult = await downloadTrack(result.link, outputPath);
+      
+      return { track: result, download: downloadResult };
     }
   } catch (error) {
     console.error('Error:', error.response?.data || error.message);
@@ -211,11 +215,11 @@ async function main() {
     // Example 4: Get recommendations
     await getRecommendations('acoustic guitar', 5);
     
-    // Example 5: Download track by URL
-    await downloadTrack('https://open.spotify.com/track/4irM0ZydWatEXDDC7SflXS');
+    // Example 5: Download track by URL (save to file)
+    await downloadTrack('https://open.spotify.com/track/4irM0ZydWatEXDDC7SflXS', './downloads/track.mp3');
     
     // Example 6: Search and download automatically (recommended!)
-    await searchAndDownload('te vi de canto');
+    await searchAndDownload('te vi de canto', './downloads/te_vi_de_canto.mp3');
     
   } catch (error) {
     console.error('Main error:', error.message);

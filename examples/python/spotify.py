@@ -180,12 +180,13 @@ def search_by_artist(artist: str, limit: int = 10) -> List[Dict]:
     print(f'\nFiltered to {len(filtered)} tracks by {artist}')
     return filtered
 
-def download_track(url: str) -> Dict:
+def download_track(url: str, output_path: Optional[str] = None) -> Dict:
     """
     Download track from Spotify by URL
     
     Args:
         url: Spotify track URL
+        output_path: Optional path to save file
     
     Returns:
         Dictionary with download information
@@ -195,90 +196,95 @@ def download_track(url: str) -> Dict:
     
     params = {'url': url}
     
-    response = requests.get(f'{BASE_URL}/spotify/download', params=params)
+    response = requests.get(f'{BASE_URL}/spotify/download', params=params, stream=True)
     response.raise_for_status()
     
-    data = response.json()
+    print('✅ Download Completo!\n')
     
-    if data['success']:
-        download = data['data']
-        print('✅ Download Ready!\n')
-        print(f"Title: {download['title']}")
-        print(f"Artists: {', '.join(download['artists'])}")
-        print(f"Album: {download['year']}")
-        print(f"Duration: {download['duration']}")
-        print(f"\n📥 Download URL: {download['downloadUrl']}")
-        
-        return download
+    # Se especificar caminho, salvar arquivo
+    if output_path:
+        with open(output_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f'💾 Arquivo salvo em: {output_path}')
     
-    return {}
+    return {
+        'success': True,
+        'size': len(response.content),
+        'content_type': response.headers.get('content-type'),
+        'filename': response.headers.get('content-disposition', '').split('filename=')[-1].strip('"') or 'track.mp3'
+    }
 
-def search_and_download(query: str) -> Dict:
+def search_and_download(query: str, output_path: Optional[str] = None) -> Dict:
     """
     Search and download track automatically
     
     Args:
         query: Track name or artist
+        output_path: Optional path to save file
     
     Returns:
         Dictionary with track and download information
     """
     print(f'\n=== Searching and Downloading: "{query}" ===\n')
     
+    # Primeiro busca para obter informações
     params = {'q': query}
     
-    response = requests.get(f'{BASE_URL}/spotify/search-download', params=params)
-    response.raise_for_status()
+    search_response = requests.get(f'{BASE_URL}/spotify/search-one', params=params)
+    search_response.raise_for_status()
     
-    data = response.json()
+    search_data = search_response.json()
     
-    if data['success']:
-        track = data['track']
-        download = data['download']
+    if search_data['success']:
+        track = search_data['result']
         
-        print('✅ Track Found and Download Ready!\n')
-        print('🎵 Track Info:')
+        print('✅ Track Found!\n')
         print(f"   Name: {track['name']}")
         print(f"   Artists: {track['artists']}")
-        print(f"   Link: {track['link']}")
-        print('\n📥 Download Info:')
-        print(f"   Title: {download['title']}")
-        print(f"   Artists: {', '.join(download['artists'])}")
-        print(f"   Album Image: {download['albumImage']}")
-        print(f"   Year: {download['year']}")
-        print(f"   Duration: {download['duration']}")
-        print(f"\n📥 Download URL: {download['downloadUrl']}")
+        print(f"   Link: {track['link']}\n")
         
-        return {'track': track, 'download': download}
+        # Agora faz o download
+        print('⬇️  Starting download...\n')
+        download_result = download_track(track['link'], output_path)
+        
+        return {'track': track, 'download': download_result}
     
     return {}
 
-def download_multiple_tracks(queries: List[str]) -> List[Dict]:
+def download_multiple_tracks(queries: List[str], output_dir: str = './downloads') -> List[Dict]:
     """
     Search and download multiple tracks
     
     Args:
         queries: List of track searches
+        output_dir: Directory to save files
     
     Returns:
         List of download results
     """
+    import os
+    
     print('\n=== Downloading Multiple Tracks ===\n')
+    
+    # Criar diretório se não existir
+    os.makedirs(output_dir, exist_ok=True)
     
     downloads = []
     
-    for query in queries:
+    for i, query in enumerate(queries, 1):
         try:
-            result = search_and_download(query)
+            output_path = os.path.join(output_dir, f'track_{i}.mp3')
+            result = search_and_download(query, output_path)
             downloads.append(result)
-            print(f"✅ Downloaded: {result['download']['title']}")
+            print(f"✅ Downloaded: {result['track']['name']}")
             time.sleep(1)  # Delay to avoid rate limiting
         except Exception as e:
             print(f"❌ Failed to download: {query} - {str(e)}")
         
         print()
     
-    print(f'\n📋 Downloaded {len(downloads)} tracks')
+    print(f'\n📋 Downloaded {len(downloads)} tracks to {output_dir}')
     return downloads
 
 # ===================
@@ -315,11 +321,11 @@ def main():
         # Example 6: Search by artist
         search_by_artist('Queen', 10)
         
-        # Example 7: Download track by URL
-        download_track('https://open.spotify.com/track/4irM0ZydWatEXDDC7SflXS')
+        # Example 7: Download track by URL (save to file)
+        download_track('https://open.spotify.com/track/4irM0ZydWatEXDDC7SflXS', './downloads/track.mp3')
         
         # Example 8: Search and download automatically (recommended!)
-        search_and_download('te vi de canto')
+        search_and_download('te vi de canto', './downloads/te_vi_de_canto.mp3')
         
         # Example 9: Download multiple tracks
         download_queries = [
@@ -327,7 +333,7 @@ def main():
             'Bohemian Rhapsody',
             'Imagine'
         ]
-        download_multiple_tracks(download_queries)
+        download_multiple_tracks(download_queries, './downloads')
         
     except Exception as e:
         print(f'Error: {str(e)}')
