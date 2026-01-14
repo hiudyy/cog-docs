@@ -3,7 +3,7 @@ import requests
 from typing import Dict, Optional
 
 API_KEY = os.getenv('COGNIMA_API_KEY', 'ck_your_api_key')
-BASE_URL = 'https://cog.api.br/api/v1'
+BASE_URL = 'https://consultas.cog.api.br/api/v1'
 
 
 def check_status() -> Dict:
