@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "chat": "node chat_completion.js",
-    "custom": "node custom_model.js",
     "pinterest": "node pinterest.js",
     "tiktok": "node tiktok.js",
     "instagram": "node instagram.js",
