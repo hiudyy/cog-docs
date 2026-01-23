@@ -8,6 +8,7 @@
     "pinterest": "node pinterest.js",
     "tiktok": "node tiktok.js",
     "instagram": "node instagram.js",
+    "removebg": "node remove_bg.js",
     "youtube": "node youtube.js",
     "lyrics": "node lyrics.js",
     "status": "node api_status.js"
