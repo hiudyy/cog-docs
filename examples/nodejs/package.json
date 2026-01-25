@@ -9,6 +9,7 @@
     "tiktok": "node tiktok.js",
     "instagram": "node instagram.js",
     "removebg": "node remove_bg.js",
+    "upscale": "node upscale.js",
     "youtube": "node youtube.js",
     "lyrics": "node lyrics.js",
     "status": "node api_status.js"
